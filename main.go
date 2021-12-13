@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sandjuarezg/social-network/packages/friend"
-	"github.com/sandjuarezg/social-network/packages/functionality"
-	"github.com/sandjuarezg/social-network/packages/post"
-	"github.com/sandjuarezg/social-network/packages/user"
+	"github.com/sandjuarezg/social-network/models"
 )
 
 func main() {
@@ -16,14 +13,14 @@ func main() {
 		exit bool
 	)
 
-	err := functionality.PreparePathDir()
+	err := models.PreparePathDir()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	for !exit {
 
-		err := functionality.CleanConsole()
+		err := models.CleanConsole()
 		if err != nil {
 			log.Println(err)
 			continue
@@ -35,7 +32,7 @@ func main() {
 		fmt.Println("2. Sing up")
 		fmt.Scanln(&opc)
 
-		err = functionality.CleanConsole()
+		err = models.CleanConsole()
 		if err != nil {
 			log.Println(err)
 			continue
@@ -47,7 +44,7 @@ func main() {
 			exit = true
 			fmt.Println(". . . .  B Y E  . . . .")
 
-			err := functionality.CleanConsole()
+			err := models.CleanConsole()
 			if err != nil {
 				log.Println(err)
 				continue
@@ -57,20 +54,20 @@ func main() {
 
 			var back bool
 
-			name, err := functionality.ScanTextByMessage("Enter user name")
+			name, err := models.ScanTextByMessage("Enter user name")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
 			fmt.Println()
-			passwd, err := functionality.ScanTextByMessage("Enter user password")
+			passwd, err := models.ScanTextByMessage("Enter user password")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
-			u, err := user.LogIn(name, passwd)
+			u, err := models.LogIn(name, passwd)
 			if err != nil {
 				log.Println(err)
 				continue
@@ -78,7 +75,7 @@ func main() {
 
 			for !back {
 
-				err := functionality.CleanConsole()
+				err := models.CleanConsole()
 				if err != nil {
 					log.Println(err)
 					continue
@@ -97,7 +94,7 @@ func main() {
 				fmt.Println("6. Show your friends")
 				fmt.Scanln(&opc)
 
-				err = functionality.CleanConsole()
+				err = models.CleanConsole()
 				if err != nil {
 					log.Println(err)
 					continue
@@ -108,7 +105,7 @@ func main() {
 
 					back = true
 
-					err := functionality.CleanConsole()
+					err := models.CleanConsole()
 					if err != nil {
 						log.Println(err)
 						continue
@@ -137,13 +134,13 @@ func main() {
 
 				case 2:
 
-					text, err := functionality.ScanTextByMessage("Enter post text")
+					text, err := models.ScanTextByMessage("Enter post text")
 					if err != nil {
 						log.Println(err)
 						continue
 					}
 
-					err = post.AddPostFile(post.Post{Username: u.Name, Text: text})
+					err = models.AddPostFile(models.Post{Username: u.Name, Text: text})
 					if err != nil {
 						log.Println(err)
 						continue
@@ -154,13 +151,13 @@ func main() {
 
 				case 3:
 
-					name, err = functionality.ScanTextByMessage("Enter username")
+					name, err = models.ScanTextByMessage("Enter username")
 					if err != nil {
 						log.Println(err)
 						continue
 					}
 
-					err = friend.AddFriendFile(u.Name, name)
+					err = models.AddFriendFile(models.Friend{FirtName: u.Name, SecondName: name})
 					if err != nil {
 						log.Println(err)
 						continue
@@ -171,13 +168,13 @@ func main() {
 
 				case 4:
 
-					name, err = functionality.ScanTextByMessage("Enter username")
+					name, err = models.ScanTextByMessage("Enter username")
 					if err != nil {
 						log.Println(err)
 						continue
 					}
 
-					err = friend.DeleteFriend(u.Name, name)
+					err = models.DeleteFriend(u.Name, name)
 					if err != nil {
 						log.Println(err)
 						continue
@@ -188,7 +185,7 @@ func main() {
 
 				case 5:
 
-					err = post.ShowPostsByUserName(u.Name)
+					err = models.ShowPostsByUserName(u.Name)
 					if err != nil {
 						log.Println(err)
 						continue
@@ -199,7 +196,7 @@ func main() {
 
 				case 6:
 
-					friends, err := friend.GetFriendsByUserName(u.Name)
+					friends, err := models.GetFriendsByUsername(u.Name)
 					if err != nil {
 						log.Println(err)
 						continue
@@ -211,35 +208,32 @@ func main() {
 					}
 
 					for _, v := range friends {
-						fmt.Println(v)
+						fmt.Printf("You and %s are friends since %s\n", v.SecondName, v.Date)
 					}
 
+					fmt.Println()
 					fmt.Println("Press ENTER to continue")
 					fmt.Scanln()
-
-				default:
-
-					fmt.Println("Option not valid")
 
 				}
 			}
 
 		case 2:
 
-			name, err := functionality.ScanTextByMessage("Enter user name")
+			name, err := models.ScanTextByMessage("Enter user name")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
 			fmt.Println()
-			passwd, err := functionality.ScanTextByMessage("Enter user password")
+			passwd, err := models.ScanTextByMessage("Enter user password")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
-			err = user.AddUserFile(user.User{Name: name, Passwd: passwd})
+			err = models.AddUserFile(models.User{Name: name, Passwd: passwd})
 			if err != nil {
 				log.Println(err)
 				continue
@@ -247,10 +241,6 @@ func main() {
 
 			fmt.Println()
 			fmt.Println("User added successfully")
-
-		default:
-
-			fmt.Println("Option not valid")
 
 		}
 

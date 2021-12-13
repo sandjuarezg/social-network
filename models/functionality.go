@@ -1,4 +1,4 @@
-package functionality
+package models
 
 import (
 	"bufio"
@@ -28,8 +28,7 @@ func PreparePathDir() (err error) {
 }
 
 func CleanConsole() (err error) {
-	fmt.Println(". . . . . . . . . . . .")
-	time.Sleep(3 * time.Second)
+	time.Sleep(1 * time.Second)
 
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout

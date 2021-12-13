@@ -1,7 +1,6 @@
-package post
+package models
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -49,10 +48,6 @@ func ShowPostsByUserName(name string) (err error) {
 		data, err := os.ReadFile(fmt.Sprintf("./data/posts/%s/%s", name, f.Name()))
 		if err != nil {
 			break
-		}
-
-		if bytes.Equal(data[len(data)-1:], []byte("\n")) {
-			data = data[:len(data)-1]
 		}
 
 		fmt.Printf("Content: %s\n", data)

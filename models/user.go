@@ -1,4 +1,4 @@
-package user
+package models
 
 import (
 	"errors"
@@ -6,8 +6,6 @@ import (
 	"io"
 	"os"
 	"strings"
-
-	"github.com/sandjuarezg/social-network/packages/friend"
 )
 
 type User struct {
@@ -15,9 +13,19 @@ type User struct {
 	Passwd string
 }
 
+func ExistUserByUsername(name string) (ban bool) {
+	_, err := os.Stat(fmt.Sprintf("./data/users/%s.txt", name))
+	if os.IsNotExist(err) {
+		return
+	}
+
+	ban = true
+
+	return
+}
+
 func AddUserFile(u User) (err error) {
-	_, err = os.Stat(fmt.Sprintf("./data/users/%s.txt", u.Name))
-	if !os.IsNotExist(err) {
+	if ExistUserByUsername(u.Name) {
 		err = errors.New("this username already exists")
 		return
 	}
@@ -68,7 +76,7 @@ func LogIn(name, passwd string) (u User, err error) {
 }
 
 func (u User) DeleteAccount() (err error) {
-	friends, err := friend.GetFriendsByUserName(u.Name)
+	friends, err := GetFriendsByUsername(u.Name)
 	if err != nil {
 		return
 	}
