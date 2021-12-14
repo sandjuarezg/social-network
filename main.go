@@ -54,14 +54,14 @@ func main() {
 
 			var back bool
 
-			name, err := models.ScanTextByMessage("Enter user name")
+			name, err := models.ScanTextWithMessagePrint("Enter user name")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
 			fmt.Println()
-			passwd, err := models.ScanTextByMessage("Enter user password")
+			passwd, err := models.ScanTextWithMessagePrint("Enter user password")
 			if err != nil {
 				log.Println(err)
 				continue
@@ -134,7 +134,7 @@ func main() {
 
 				case 2:
 
-					text, err := models.ScanTextByMessage("Enter post text")
+					text, err := models.ScanTextWithMessagePrint("Enter post text")
 					if err != nil {
 						log.Println(err)
 						continue
@@ -151,7 +151,7 @@ func main() {
 
 				case 3:
 
-					name, err = models.ScanTextByMessage("Enter username")
+					name, err = models.ScanTextWithMessagePrint("Enter username")
 					if err != nil {
 						log.Println(err)
 						continue
@@ -168,7 +168,7 @@ func main() {
 
 				case 4:
 
-					name, err = models.ScanTextByMessage("Enter username")
+					name, err = models.ScanTextWithMessagePrint("Enter username")
 					if err != nil {
 						log.Println(err)
 						continue
@@ -220,14 +220,14 @@ func main() {
 
 		case 2:
 
-			name, err := models.ScanTextByMessage("Enter user name")
+			name, err := models.ScanTextWithMessagePrint("Enter user name")
 			if err != nil {
 				log.Println(err)
 				continue
 			}
 
 			fmt.Println()
-			passwd, err := models.ScanTextByMessage("Enter user password")
+			passwd, err := models.ScanTextWithMessagePrint("Enter user password")
 			if err != nil {
 				log.Println(err)
 				continue

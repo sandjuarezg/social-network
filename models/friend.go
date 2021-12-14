@@ -11,7 +11,7 @@ import (
 type Friend struct {
 	FirtName   string
 	SecondName string
-	Date       string
+	Date       time.Time
 }
 
 func AddFriendFile(frds Friend) (err error) {
@@ -37,17 +37,8 @@ func AddFriendFile(frds Friend) (err error) {
 		return
 	}
 
-	file, err := os.Create(aux)
+	err = os.WriteFile(aux, []byte(time.Now().Format(time.RFC822)), 0600)
 	if err != nil {
-		return
-	}
-	defer file.Close()
-
-	t := time.Now()
-
-	_, err = file.WriteString(fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day()))
-	if err != nil {
-		err = errors.New("error to write")
 		return
 	}
 
@@ -80,7 +71,10 @@ func GetFriendsByUsername(name string) (frds []Friend, err error) {
 				return
 			}
 
-			auxFriend.Date = string(content)
+			auxFriend.Date, err = time.Parse(time.RFC822, string(content))
+			if err != nil {
+				return
+			}
 
 			for _, item := range aux {
 				if item != name {

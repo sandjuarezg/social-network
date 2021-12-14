@@ -22,13 +22,7 @@ func AddPostFile(p Post) (err error) {
 		return
 	}
 
-	file, err := os.Create(fmt.Sprintf("./data/posts/%s/%d.txt", p.Username, len(files)+1))
-	if err != nil {
-		return
-	}
-	defer file.Close()
-
-	_, err = file.WriteString(p.Text)
+	err = os.WriteFile(fmt.Sprintf("./data/posts/%s/%d.txt", p.Username, len(files)+1), []byte(p.Text), 0600)
 	if err != nil {
 		return
 	}

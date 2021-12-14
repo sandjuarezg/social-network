@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 )
@@ -25,26 +24,19 @@ func ExistUserByUsername(name string) (ban bool) {
 }
 
 func AddUserFile(u User) (err error) {
-	if ExistUserByUsername(u.Name) {
-		err = errors.New("this username already exists")
-		return
-	}
-
 	if strings.Contains(u.Name, "_") {
 		err = errors.New("can't include the character '_'")
 		return
 	}
 
-	file, err := os.Create(fmt.Sprintf("./data/users/%s.txt", u.Name))
-	if err != nil {
-		err = errors.New("error to add user")
+	if ExistUserByUsername(u.Name) {
+		err = errors.New("this username already exists")
 		return
 	}
-	defer file.Close()
 
-	_, err = file.WriteString(u.Passwd)
+	err = os.WriteFile(fmt.Sprintf("./data/users/%s.txt", u.Name), []byte(u.Passwd), 0600)
 	if err != nil {
-		err = errors.New("error to write password")
+		err = errors.New("error to add user")
 		return
 	}
 
@@ -52,14 +44,12 @@ func AddUserFile(u User) (err error) {
 }
 
 func LogIn(name, passwd string) (u User, err error) {
-	file, err := os.Open(fmt.Sprintf("./data/users/%s.txt", name))
-	if err != nil {
+	if !ExistUserByUsername(name) {
 		err = errors.New("user not found")
 		return
 	}
-	defer file.Close()
 
-	content, err := io.ReadAll(file)
+	content, err := os.ReadFile(fmt.Sprintf("./data/users/%s.txt", name))
 	if err != nil {
 		err = errors.New("error to read password")
 		return

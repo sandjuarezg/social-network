@@ -41,7 +41,7 @@ func CleanConsole() (err error) {
 	return
 }
 
-func ScanTextByMessage(msg string) (text string, err error) {
+func ScanTextWithMessagePrint(msg string) (text string, err error) {
 	fmt.Println(msg)
 	aux, _, err := bufio.NewReader(os.Stdin).ReadLine()
 	if err != nil {
