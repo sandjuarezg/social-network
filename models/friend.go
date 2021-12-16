@@ -20,7 +20,22 @@ func AddFriendFile(frds Friend) (err error) {
 		return
 	}
 
-	if !ExistUserByUsername(frds.FirtName) || !ExistUserByUsername(frds.SecondName) {
+	ban, err := ExistUserByUsername(frds.FirtName)
+	if err != nil {
+		return
+	}
+
+	if !ban {
+		err = errors.New("username not found")
+		return
+	}
+
+	ban, err = ExistUserByUsername(frds.SecondName)
+	if err != nil {
+		return
+	}
+
+	if !ban {
 		err = errors.New("username not found")
 		return
 	}

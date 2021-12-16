@@ -12,9 +12,13 @@ type User struct {
 	Passwd string
 }
 
-func ExistUserByUsername(name string) (ban bool) {
-	_, err := os.Stat(fmt.Sprintf("./data/users/%s.txt", name))
-	if os.IsNotExist(err) {
+func ExistUserByUsername(name string) (ban bool, err error) {
+	_, err = os.Stat(fmt.Sprintf("./data/users/%s.txt", name))
+	if err != nil {
+		if os.IsNotExist(err) {
+			return
+		}
+
 		return
 	}
 
@@ -29,7 +33,12 @@ func AddUserFile(u User) (err error) {
 		return
 	}
 
-	if ExistUserByUsername(u.Name) {
+	ban, err := ExistUserByUsername(u.Name)
+	if err != nil {
+		return
+	}
+
+	if ban {
 		err = errors.New("this username already exists")
 		return
 	}
@@ -44,7 +53,12 @@ func AddUserFile(u User) (err error) {
 }
 
 func LogIn(name, passwd string) (u User, err error) {
-	if !ExistUserByUsername(name) {
+	ban, err := ExistUserByUsername(name)
+	if err != nil {
+		return
+	}
+
+	if !ban {
 		err = errors.New("user not found")
 		return
 	}
